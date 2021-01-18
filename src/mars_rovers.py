@@ -1,6 +1,7 @@
+from abc import ABC, abstractmethod
 from enum import Enum
 from functools import reduce
-from typing import Dict, Callable, Iterator, List, Tuple
+from typing import Dict, Callable, Iterator, List, Optional, Tuple, cast
 
 class AbstractAction(Enum):
     pass
@@ -12,14 +13,40 @@ class RotateAction(AbstractAction):
 class MoveAction(AbstractAction):
     Move  = "M"
 
-class InvalidActionException(Exception):
+class Observer(ABC):
+
+    @abstractmethod
+    def update(self, subject, action: AbstractAction):
+        pass
+
+class Observable:
+    def __init__(self):
+        self.observers: List[Observer] = list()
+
+    def register(self, object: Observer):
+        self.observers.append(object)
+
+    def nofity(self, action: AbstractAction):
+        for o in self.observers:
+            o.update(self, action)
+
+class RoverNotLandedError(Exception):
     pass
+
+class LocationOutOfPlateauError(Exception):
+    def __init__(self, x:int, y:int):
+        super().__init__(f"{x},{y} out of bounds")
 
 class Cardinal(Enum):
     North = "N"
     East  = "E"
     South = "S"
     West  = "W"
+
+class MarsPlateauLocation:
+    def __init__(self, x: int = 0, y:int = 0):
+        self.x: int = x
+        self.y: int = y
 
 class Compass:
     cardinals: List[Cardinal] = list(Cardinal)
@@ -48,25 +75,21 @@ class WheelSystem:
         move_command: WheelSystem.MoveCommand = WheelSystem.move_commands[orientation]
         return move_command(x,y)
 
-class Rover:
-    def __init__(self, start_x: int = 0, start_y:int = 0, orientation: Cardinal = Cardinal.North):
-        self.x: int = start_x
-        self.y: int = start_y
-        self.orientation: Cardinal = orientation
+class Rover(Observable):
+    def __init__(self, orientation: Cardinal):
+        super().__init__()
+        self.orientation = orientation
 
     def execute(self, action: AbstractAction):
-        if isinstance(action, MoveAction):
-            self.x, self.y = WheelSystem.move(self.x, self.y, self.orientation)
-        elif isinstance(action, RotateAction):
+        if isinstance(action, RotateAction):
             self.orientation = Compass.rotate(self.orientation, action)
         else:
-            raise InvalidActionException(str(action))
+            # Doesn't care about any other action
+            pass
+        # Notify observers about the action
+        self.nofity(action)
 
-    def __str__(self) -> str:
-        return f"{self.x} {self.y} {self.orientation.value}"
-
-
-class MarsPateau:
+class MarsPateau(Observer):
 
     class CardinalSymbol(Enum):
         North = "^"
@@ -77,7 +100,7 @@ class MarsPateau:
     def __init__(self, rows:int, columns:int):
         self.rows = rows
         self.columns = columns
-        self.rovers: List[Rover] = list()
+        self.plateau: Dict[int, Dict[int, Rover]] = dict()
         self.cardinal_symbols: Dict[Cardinal, MarsPateau.CardinalSymbol] = {
             Cardinal.North: MarsPateau.CardinalSymbol.North,
             Cardinal.East:  MarsPateau.CardinalSymbol.East,
@@ -85,16 +108,44 @@ class MarsPateau:
             Cardinal.West:  MarsPateau.CardinalSymbol.West,
         }
 
-    def rover_landing(self, rover: Rover):
-        self.rovers.append(rover)
+    def _place_rover(self, rover: Rover, x:int, y:int):
+        if x<0 or x>=self.columns or y<0 or y>=self.rows:
+            raise LocationOutOfPlateauError(x,y)
+        if not y in self.plateau:
+            self.plateau[y] = dict()
+        self.plateau[y][x] = rover
 
-    def get_rovers_positions(self) -> str:
-        return " ".join(map(str,self.rovers))
+    def _find_rover(self, rover) -> Optional[MarsPlateauLocation]:
+        for x in range(self.columns):
+            for y in range(self.rows):
+                if self.plateau.get(y,{}).get(x) == rover:
+                    return MarsPlateauLocation(x,y)
+        return None
+
+    def rover_landing(self, rover: Rover, loc: MarsPlateauLocation):
+        self._place_rover(rover, loc.x, loc.y)
+        rover.register(self)
+
+    def update(self, subject, action: AbstractAction):
+        rover: Rover = cast(Rover, subject)
+        if isinstance(action, MoveAction):
+            current_loc: Optional[MarsPlateauLocation] = self._find_rover(rover)
+            if current_loc:
+                del self.plateau[current_loc.y][current_loc.x]
+                new_x, new_y = WheelSystem.move(current_loc.x, current_loc.y, rover.orientation)
+                self._place_rover(rover, new_x, new_y)
+            else:
+                raise RoverNotLandedError()
+        else:
+            # Doesn't care about any other action
+            pass
 
     def get_snapshot(self) -> str:
-        matrix: List[List[str]] = [["•" for _ in range(self.columns)] for _ in range(self.rows)]
-        for rover in self.rovers:
-            matrix[rover.y][rover.x] = self.cardinal_symbols[rover.orientation].value
+        matrix: List[List[str]] = [
+            [self.cardinal_symbols[self.plateau[y][x].orientation].value 
+            if self.plateau.get(y,{}).get(x) else "•" 
+            for x in range(self.columns)] 
+                for y in range(self.rows)]
         matrix_str: str = reduce(lambda row_k, row_k1: row_k1 +"\n"+row_k, map(lambda row: " ".join(row), matrix))
         return matrix_str
 
@@ -148,9 +199,10 @@ class MissionControl:
     def send_comms_to_rovers(self):
         for rover_commands in self.rover_commands_list:
             landing_x, landing_y, landing_orientation = rover_commands.get_landing_params()
-            rover: Rover = Rover(landing_x, landing_y, landing_orientation)
+            loc: MarsPlateauLocation = MarsPlateauLocation(landing_x, landing_y)
+            rover: Rover = Rover(landing_orientation)
             
-            self.mars_plateau.rover_landing(rover)
+            self.mars_plateau.rover_landing(rover, loc)
             for action in rover_commands.get_actions():
                 rover.execute(action)
 
@@ -159,5 +211,4 @@ sample_input: str = "5 5\n1 2 N\nLMLMLMLMM\n3 3 E\nMMRMMRMRRM"
 
 mc: MissionControl = MissionControl(sample_input)
 mc.send_comms_to_rovers()
-print(mc.get_mars_plateau().get_rovers_positions())
 print(mc.get_mars_plateau().get_snapshot())
