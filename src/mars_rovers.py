@@ -207,6 +207,7 @@ class MissionControl:
                 rover.execute(action)
 
 
+# Test
 sample_input: str = "5 5\n1 2 N\nLMLMLMLMM\n3 3 E\nMMRMMRMRRM"
 
 mc: MissionControl = MissionControl(sample_input)
