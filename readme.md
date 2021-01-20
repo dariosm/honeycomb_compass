@@ -35,6 +35,6 @@ MMRMMRMRRM
 
 # UI
 Create a simple Web UI to visualize:
-- customized plateau dimensions: the user can enter the number of rows and columns, and visualize the grid
-- rover landing: the user can specify a rover’s stating position, and visualize the rover in the plateau
-- rover's initial and final position: the user can enter instructions for a specific rover, and visualise the rover in its final position
+- plateau grid: the user can enter the number of rows and columns, and visualize the grid
+- rover landing: the user can specify a rover’s stating position, and visualize the rover's landing position and orientation in the grid
+- rover's final position: the user can enter instructions for a specific rover, and visualise the rover in its final position
