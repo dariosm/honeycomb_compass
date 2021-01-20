@@ -17,7 +17,7 @@ Each rover has two lines of input. The first line gives the rover’s position, 
 Each rover will be finished sequentially, which means that the second rover won’t start to move until the first one has finished moving.
 
 ## Output
-The output for each rover should be its final co-ordinates and heading.
+The output for each rover should be its final co-ordinates and heading. One line per final rover position.
 
 ## Example
 ### Input
@@ -30,7 +30,8 @@ MMRMMRMRRM
 ```
 ### Expected Output
 ```
-1 3 N 5 1 E
+1 3 N
+5 1 E
 ````
 
 # UI
