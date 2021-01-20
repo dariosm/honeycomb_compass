@@ -34,7 +34,7 @@ MMRMMRMRRM
 ````
 
 # UI
-As a complement to the solution of the problem, create a Web UI where users should be able to:
-- set up the grid dimensions and visualise it accordingly
-- input rover’s stating position and visualise it in the grid
-- input the instructions, run them, and visualise the rover in its final position
+Create a Web UI with the following features:
+- customized plateau dimensions: the user can enter the number of rows and columns, and visualize the grid
+- rover landing: the user can specify a rover’s stating position, and visualize the rover in the plateau
+- send commands to a rover: the user can enter instructions for a specific rover, and visualise the rover in its final position
