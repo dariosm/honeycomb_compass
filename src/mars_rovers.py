@@ -89,7 +89,7 @@ class Rover(Observable):
         # Notify observers about the action
         self.nofity(action)
 
-class MarsPateau(Observer):
+class MarsPlateau(Observer):
 
     class CardinalSymbol(Enum):
         North = "^"
@@ -101,11 +101,11 @@ class MarsPateau(Observer):
         self.rows = rows
         self.columns = columns
         self.plateau: Dict[int, Dict[int, Rover]] = dict()
-        self.cardinal_symbols: Dict[Cardinal, MarsPateau.CardinalSymbol] = {
-            Cardinal.North: MarsPateau.CardinalSymbol.North,
-            Cardinal.East:  MarsPateau.CardinalSymbol.East,
-            Cardinal.South: MarsPateau.CardinalSymbol.South,
-            Cardinal.West:  MarsPateau.CardinalSymbol.West,
+        self.cardinal_symbols: Dict[Cardinal, MarsPlateau.CardinalSymbol] = {
+            Cardinal.North: MarsPlateau.CardinalSymbol.North,
+            Cardinal.East:  MarsPlateau.CardinalSymbol.East,
+            Cardinal.South: MarsPlateau.CardinalSymbol.South,
+            Cardinal.West:  MarsPlateau.CardinalSymbol.West,
         }
 
     def _place_rover(self, rover: Rover, x:int, y:int):
@@ -190,10 +190,10 @@ class MissionControl:
 
     def __init__(self, input: str):
         n,m,rover_commands_list = self._parse_input(input)
-        self.mars_plateau = MarsPateau(n+1,m+1)
+        self.mars_plateau = MarsPlateau(n+1,m+1)
         self.rover_commands_list: List[MissionControl.RoverCommands] = rover_commands_list
 
-    def get_mars_plateau(self) -> MarsPateau:
+    def get_mars_plateau(self) -> MarsPlateau:
         return self.mars_plateau
 
     def send_comms_to_rovers(self):
