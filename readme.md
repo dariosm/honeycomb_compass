@@ -18,8 +18,8 @@ Design and implement a system to support the researcher's bio-interface.
 The system expects:
 1. one line for the honeycomb's upper-right coordinates (lower-left coordinates are assumed to be `0, 0`), which is used to initialize the honeycomb.
 2. two lines per bee: 
-2.1. 1st line indicates the initial position and heading where the bee is initially placed
-2.2. 2nd line indicates a stream of instructions to guide the bee
+- 1st line indicates the initial position and heading where the bee is initially placed
+- 2nd line indicates a stream of instructions to guide the bee
 
 The output for each stream processed is the final position and heading where the bee ended up.
 
