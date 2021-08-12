@@ -8,7 +8,7 @@ The initial position for such a design is `0, 0, N`, which identifies a bee loca
 
 In order to guide a bee to its final location, the researcher designed a bio-interface to trigger the following actions:
 - spin 90 degrees left or right, without moving from its current spot: in this case, the bio-interface accepts commands `L` and `R`, for left and right rotation respectively
-- move forward one cell in the honecomb, maintain the same heading: in this case, the bio-interface accepts command `M`
+- move forward one cell in the honeycomb, maintain the same heading: in this case, the bio-interface accepts command `M`
 
 # Model and algorithmic
 
