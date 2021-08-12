@@ -13,7 +13,7 @@ In order to guide a bee to its final location, the researcher designed a bio-int
 # Model and algorithmic
 
 Design and implement a systm to support the bio-interface. 
-- the system must be initilized with the honeycomb shape parameters, that is, the upper-right coordinates (lower-left coordinates are assumed to be `0, 0`). 
+- the system must be initialized with the honeycomb shape parameters, that is, the upper-right coordinates (lower-left coordinates are assumed to be `0, 0`). 
 - the system must accept instructions to guide bees, each at a time, comprising the position of cell where the bee lands together with the orientation, and a stream of `L, R, M` instructions as described before.
 - the output for each stream processed is the final position and heading where the bee ended up
 
@@ -33,10 +33,10 @@ MMRMMRMRRM
 ````
 
 # REST API
-Since the bio-interface device is meant to be used by different researchers to conduct experiments, you are asked to design and implement a robut REST API that allows to operate remotely, re-using the system from the previous.
+Since the bio-interface device is meant to be used by different researchers to conduct experiments, you are asked to design and implement a robust REST API that allows to operate remotely, re-using the system defined above.
 
 # Web UI
 Create a simple Web UI to visualize:
-- honeycomb grid: the user enters the shape of the honecomb so it can be initialized and rendered
+- honeycomb grid: the user enters the shape of the honeycomb so it can be initialized and rendered
 - bee tour: the user specifies where the bee starts, where is heading to, and visualize it the honecomb
-- final position: the user enters instructions for a specific bee, and visualise the final position
+- final position: the user enters instructions for a specific bee, and visualize the final position
