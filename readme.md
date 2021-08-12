@@ -12,10 +12,16 @@ In order to guide a bee to its final location, the researcher designed a bio-int
 
 # Model and algorithmic
 
-Design and implement a systm to support the bio-interface. 
-- the system must be initialized with the honeycomb shape parameters, that is, the upper-right coordinates (lower-left coordinates are assumed to be `0, 0`). 
-- the system must accept instructions to guide bees, each at a time, comprising the position of cell where the bee lands together with the orientation, and a stream of `L, R, M` instructions as described before.
-- the output for each stream processed is the final position and heading where the bee ended up
+# Model and algorithmic
+
+Design and implement a system to support the researcher's bio-interface. 
+The system expects:
+1. one line for the honeycomb's upper-right coordinates (lower-left coordinates are assumed to be `0, 0`), which is used to initialize the honeycomb.
+2. two lines per bee: 
+2.1. 1st line indicates the initial position and heading where the bee is initially placed
+2.2. 2nd line indicates a stream of instructions to guide the bee
+
+The output for each stream processed is the final position and heading where the bee ended up.
 
 ## Example
 ### Input
