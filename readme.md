@@ -12,8 +12,6 @@ In order to guide a bee to its final location, the researcher designed a bio-int
 
 # Model and algorithmic
 
-# Model and algorithmic
-
 Design and implement a system to support the researcher's bio-interface. 
 The system expects:
 1. one line for the honeycomb's upper-right coordinates (lower-left coordinates are assumed to be `0, 0`), which is used to initialize the honeycomb.
