@@ -44,3 +44,8 @@ Create a simple Web UI to visualize:
 - honeycomb grid: the user enters the shape of the honeycomb so it can be initialized and rendered
 - bee tour: the user specifies where the bee starts, where is heading to, and visualize it the honecomb
 - final position: the user enters instructions for a specific bee, and visualize the final position
+
+# Web UI (lite)
+Create a simple UI that uses the API you created, possibly including:
+- Honeycomb grid graphical representation
+- Bees movements according to the instruction stream they receive
